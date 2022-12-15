@@ -8,8 +8,15 @@ import ru.jevo.shoppinglist.domain.ShopListRepository
  */
 object ShopListRepositoryImpl : ShopListRepository {
 
-    private val listShop = mutableListOf<ShopElement>()
+    val listShop = mutableListOf<ShopElement>()
     private var id = 0
+
+    init {
+        for (i in 0 until 10) {
+            val el = ShopElement("товар $i", 1, true, i)
+            listShop.add(el)
+        }
+    }
 
     override fun addElement(shopElement: ShopElement) {
         if (shopElement.id == ShopElement.UNDEFINED_ID)
@@ -34,6 +41,6 @@ object ShopListRepositoryImpl : ShopListRepository {
     }
 
     override fun showListElements(): List<ShopElement> {
-        return listShop.toList()
+        return listShop
     }
 }
