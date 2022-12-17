@@ -1,5 +1,7 @@
 package ru.jevo.shoppinglist.domain
 
+import androidx.lifecycle.LiveData
+
 /**
  * Created by Alex on 12.12.2022.
  */
@@ -9,6 +11,6 @@ interface ShopListRepository {
     fun editElement(shopElement: ShopElement)
     fun deleteElement(shopElement: ShopElement)
     fun showElement(id: Int): ShopElement
-    fun showListElements(): List<ShopElement>
+    fun showListElements(): LiveData<List<ShopElement>>
 
 }

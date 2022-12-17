@@ -5,21 +5,26 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import ru.jevo.shoppinglist.R
-import ru.jevo.shoppinglist.domain.ShopElement
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
+    var count = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-        viewModel.shopList.observe(this){
+        viewModel.shopList.observe(this) {
             Log.d("Прилет", it.toString())
+            if (count == 0) {
+                count++
+                viewModel.deleteElement(it[0])
+                viewModel.editElement(it[1])
+            }
         }
-      //  viewModel.getShopList()
-       // viewModel.deleteElement(el11)
+        //  viewModel.getShopList()
+        // viewModel.deleteElement(el11)
 
     }
 }

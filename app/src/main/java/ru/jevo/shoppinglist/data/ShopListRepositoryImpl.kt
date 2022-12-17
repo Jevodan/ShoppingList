@@ -1,5 +1,7 @@
 package ru.jevo.shoppinglist.data
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import ru.jevo.shoppinglist.domain.ShopElement
 import ru.jevo.shoppinglist.domain.ShopListRepository
 
@@ -8,6 +10,7 @@ import ru.jevo.shoppinglist.domain.ShopListRepository
  */
 object ShopListRepositoryImpl : ShopListRepository {
 
+    val listLD = MutableLiveData<List<ShopElement>>()
     val listShop = mutableListOf<ShopElement>()
     private var id = 0
 
@@ -22,16 +25,18 @@ object ShopListRepositoryImpl : ShopListRepository {
         if (shopElement.id == ShopElement.UNDEFINED_ID)
             shopElement.id = id++
         listShop.add(shopElement)
+        updateListLD()
     }
 
     override fun editElement(shopElement: ShopElement) {
         val oldElement = showElement(shopElement.id)
-        listShop.add(shopElement)
+        listShop.remove(shopElement)
         addElement(shopElement)
     }
 
     override fun deleteElement(shopElement: ShopElement) {
         listShop.remove(shopElement)
+        updateListLD()
     }
 
     override fun showElement(id: Int): ShopElement {
@@ -40,7 +45,12 @@ object ShopListRepositoryImpl : ShopListRepository {
         } ?: throw Exception("айди $id не найден")
     }
 
-    override fun showListElements(): List<ShopElement> {
-        return listShop
+    override fun showListElements(): LiveData<List<ShopElement>> {
+        updateListLD()
+        return listLD
+    }
+
+    fun updateListLD() {
+        listLD.value = listShop.toList()
     }
 }

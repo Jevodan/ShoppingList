@@ -15,25 +15,20 @@ import ru.jevo.shoppinglist.domain.ShowShopListElementsUseCase
 class MainViewModel : ViewModel() {
 
     private val shopListRepository = ShopListRepositoryImpl
-    val shopList = MutableLiveData<List<ShopElement>>()
+
 
     val showList = ShowShopListElementsUseCase(shopListRepository)
     val editElement = EditShopElementUseCase(shopListRepository)
     val deleteElement = DeleteShopElementUseCase(shopListRepository)
 
-    fun getShopList() {
-        val list = showList.showListElements()
-        shopList.setValue(list)
-    }
+    val shopList = showList.showListElements()
 
     fun deleteElement(element: ShopElement) {
         deleteElement.deleteElement(element)
-        getShopList()
     }
 
     fun editElement(element: ShopElement) {
         val newElement = element.copy(active = !element.active)
         editElement.editElement(newElement)
-        getShopList()
     }
 }
